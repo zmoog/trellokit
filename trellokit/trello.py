@@ -27,9 +27,14 @@ class Label(BaseModel):
     name: str
     color: str
 
+    def __str__(self):
+        return self.name
+
+
 class Badges(BaseModel):
     due: typing.Optional[str]
     start: typing.Optional[str]
+
 
 class Card(BaseModel):
     id: str
@@ -37,6 +42,8 @@ class Card(BaseModel):
     labels: typing.List[Label]
     badges: Badges
     start: typing.Optional[str]
+    dateLastActivity: str
+
 
 class Boards:
     
@@ -52,7 +59,6 @@ class Boards:
         }
 
         url = "?".join([self.api_url, urllib.parse.urlencode(params)])
-        print(url)
 
         resp = httpx.get(url)
         if resp.status_code != 200:
@@ -82,13 +88,11 @@ class Lists:
             "https://api.trello.com/1/boards/{id}/lists".format(id=board_id),
             urllib.parse.urlencode(params),
         ])
-        print(url)
 
         resp = httpx.get(url)
         if resp.status_code != 200:
             raise Exception(resp.text)
 
-        print(resp.text)
 
         boards = []
         for entry in resp.json():
@@ -104,7 +108,7 @@ class Cards:
         self.api_token = api_token
         self.api_url = api_url
 
-    def list_by_list_id(self, list_id: str):
+    def list(self, list_id: str):
         params = {
             "key": self.api_key,
             "token": self.api_token
@@ -114,13 +118,10 @@ class Cards:
             "https://api.trello.com/1/lists/{id}/cards".format(id=list_id),
             urllib.parse.urlencode(params),
         ])
-        print(url)
 
         resp = httpx.get(url)
         if resp.status_code != 200:
             raise Exception(resp.text)
-
-        # print(resp.text)
 
         cards = []
         for entry in resp.json():
