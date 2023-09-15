@@ -161,7 +161,7 @@ def _render_cards(cards: typing.List[Card], title: str = "Cards"):
             # format timedelta to the number of days
             age = str(age.days) + " days"
         else:
-            age = ""
+            age = "non started yet"
 
         table.add_row(
             e.id,

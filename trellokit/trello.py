@@ -1,3 +1,4 @@
+import datetime
 import typing
 import urllib
 
@@ -39,11 +40,27 @@ class Badges(BaseModel):
 class Card(BaseModel):
     id: str
     name: str
+    url: str
     labels: typing.List[Label]
     badges: Badges
     start: typing.Optional[str]
     dateLastActivity: str
 
+    @property
+    def age(self):
+        if self.start:
+            now = datetime.datetime.now()
+            start = datetime.datetime.strptime(self.start, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+            # calculate the card age
+            age = now - start
+
+            # format timedelta to the number of days
+            age = str(age.days) + " days"
+            
+            return age
+        
+        return ""
 
 class Boards:
     
