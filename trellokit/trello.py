@@ -108,7 +108,7 @@ class Cards:
         self.api_token = api_token
         self.api_url = api_url
 
-    def list(self, list_id: str):
+    def list(self, list_id: str, label: str = None):
         params = {
             "key": self.api_key,
             "token": self.api_token
@@ -126,5 +126,8 @@ class Cards:
         cards = []
         for entry in resp.json():
             cards.append(Card.model_validate(entry))
+
+        if label:
+            cards = [c for c in cards if label in [l.name for l in c.labels]]
 
         return cards
