@@ -1,4 +1,5 @@
 import datetime
+import functools
 import typing
 import urllib
 
@@ -22,6 +23,7 @@ class List(BaseModel):
     subscribed: bool
 
 
+@functools.total_ordering
 class Label(BaseModel):
     id: str
     idBoard: str
@@ -30,6 +32,9 @@ class Label(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def __lt__(self, other):
+        return self.name < other.name
 
 
 class Badges(BaseModel):
