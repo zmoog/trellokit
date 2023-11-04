@@ -49,7 +49,15 @@ class Card(BaseModel):
     labels: typing.List[Label]
     badges: Badges
     start: typing.Optional[str]
+    due: typing.Optional[str]
     dateLastActivity: str
+
+    @property
+    def due_date(self) -> typing.Optional[datetime.datetime]:
+        if not self.due:
+            return None
+        
+        return datetime.datetime.strptime(self.due, "%Y-%m-%dT%H:%M:%S.%fZ")
 
     @property
     def age(self):
